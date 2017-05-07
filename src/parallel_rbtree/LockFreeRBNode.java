@@ -1,17 +1,17 @@
 package parallel_rbtree;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.*;
 
 public class LockFreeRBNode {
-	private Integer value;
+	private int value;
 	private LockFreeRBNode left;
 	private LockFreeRBNode right;
 	private LockFreeRBNode parent;
 	private boolean isRed;
 	public AtomicBoolean flag;
 	
-	public LockFreeRBNode() {
-		this.value = null;
+	public LockFreeRBNode(){
+		this.value = Integer.MIN_VALUE;
 		this.left = null;
 		this.right = null;
 		this.parent = null;
@@ -19,7 +19,7 @@ public class LockFreeRBNode {
 		this.flag = new AtomicBoolean(false);
 	}
 	
-	public LockFreeRBNode(int value) {
+	public LockFreeRBNode(int value){
 		this.value = value;
 		this.left = null;
 		this.right = null;
@@ -28,11 +28,11 @@ public class LockFreeRBNode {
 		this.flag = new AtomicBoolean(false);
 	}
 
-	public Integer getValue() {
+	public int getValue() {
 		return value;
 	}
 
-	public void setValue(Integer value) {
+	public void setValue(int value) {
 		this.value = value;
 	}
 

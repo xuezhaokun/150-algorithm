@@ -17,7 +17,7 @@ public class TestTrees {
 			//while (counter < 10) {
 				long start = 0, end = 0, duration = 0;
 				int num_threads = 4;
-				int insert_nodes_per_thread = 50;
+				int insert_nodes_per_thread = 200;
 			
 				List<Thread> threads = new ArrayList<Thread>();
 				Lock lock = new ReentrantLock();
@@ -64,7 +64,7 @@ public class TestTrees {
 				//lock_free_tree.print();
 				//System.out.println("");
 				System.out.println("LockFreeRBTree each thread insert "+insert_nodes_per_thread+" nodes using " +(double)duration + " ms");
-		       System.out.println("\n\rLock-Free Red-Black Tree Search test");
+		        System.out.println("\n\rLock-Free Red-Black Tree Search test");
 		       //tree2.print();
 		       //System.out.println("");
 		      // tree1.print();

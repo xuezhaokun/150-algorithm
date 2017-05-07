@@ -1,21 +1,21 @@
 package parallel_rbtree;
 
 public class LockedRBNode {
-	private Integer value;
+	private int value;
 	private LockedRBNode left;
 	private LockedRBNode right;
 	private LockedRBNode parent;
 	private boolean isRed;
 	
-	public LockedRBNode() {
-		this.value = null;
+	public LockedRBNode(){
+		this.value = Integer.MIN_VALUE;
 		this.left = null;
 		this.right = null;
 		this.parent = null;
 		this.isRed = false;
 	}
 	
-	public LockedRBNode(int value) {
+	public LockedRBNode(int value){
 		this.value = value;
 		this.left = null;
 		this.right = null;
@@ -23,11 +23,11 @@ public class LockedRBNode {
 		this.isRed = true;
 	}
 
-	public Integer getValue() {
+	public int getValue() {
 		return value;
 	}
 
-	public void setValue(Integer value) {
+	public void setValue(int value) {
 		this.value = value;
 	}
 
@@ -61,6 +61,5 @@ public class LockedRBNode {
 
 	public void setRed(boolean isRed) {
 		this.isRed = isRed;
-	}
-	
+	}	
 }
