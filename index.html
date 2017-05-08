@@ -15,17 +15,63 @@
 	<h2>Zhaokun Xue</h2>
 </div>
 <div class="container">
-	<h2>Introduction</h2>
-	<p>
-		In our previous study, we have done detailed analysis for basic operations of the red-black tree based on the traditional sequential algorithm. In this project, I am going to apply parallel algorithm to implement red-black tree‘s operations, search and insertion. And I will compare the performance of search and insertion operations for lock-based and lock-free parallel algorithms. 
-	</p>
-	<p>
-		The red-black tree is a balanced binary search tree with height O(log <i>n</i>), and efficient search, insertion, and deletion operations, which makes it a better choice than regular binary search in search-intensive applications. And it only requires few rotations to rebalance the tree and keep it red-black properties.
-	</p>
+	<div class="row">
+		<h2>Introduction</h2>
+		<p>
+			In our previous study, we have done detailed analysis for basic operations of the red-black tree based on the traditional sequential algorithm. In this project, I am going to apply parallel algorithm to implement red-black tree‘s operations, search and insertion. And I will compare the performance of search and insertion operations for lock-based and lock-free parallel algorithms. 
+		</p>
+		<p>
+			The red-black tree is a balanced binary search tree with height O(log <i>n</i>), and efficient search, insertion, and deletion operations, which makes it a better choice than regular binary search in search-intensive applications. And it only requires few rotations to rebalance the tree and keep it red-black properties.
+		</p>
+	</div>
 </div>
 <div class="container">
-	<h2>Parallel Algorithm</h2>
-	<h3>Lock-Bases Algorithm</h3>
+	<div class="row">
+		<h2>Parallel Algorithm</h2>
+			<p>
+				<i>"A parallel algorithm, as opposed to a traditional sequential algorithm, is an algorithm which can be executed a piece at a time on many different processing devices, and then combined together again at the end to get the correct result."</i>
+			</p>
+			<p>
+				People usually build cost-effective parallel algorithms by defining multiple operations on each step to improve the performance of traditional sequential algorithm, which specifies a sequence of operations and each step does one operation.
+			</p>
+			<h3>Lock-Based Algorithm</h3>
+				<p>
+					<i>"A lock or mutex (from mutual exclusion) is a synchronization mechanism for enforcing limits on access to a resource in an environment where there are many threads of execution."</i>
+				</p>
+				<p>
+					Lock-based parallel algorithms are usually implemented on the parallel random-access machine (PRAM), which is a shared-memory model of parallel computation that consists of a collection of identical processors and a shared memory. There are four types of PRAM.
+					<ul>
+		  				<li><b>EREW (exclusive read exclusive write)</b></li>
+		  				Conccurents are not allowed to read and write to the same memory location at the same time.
+		  				<li><b>CREW (concurrent read exclusive write)</b></li>
+		  				Conccurents can only read a memory location.
+		  				<li><b>CRCW (concurrent read concurrent write)</b></li>
+		  				Concurrents allows both concurrent reads and concurrent writes to a memory location
+		  				<li><b>ERCW (Exclusive read concurrent write)</b></li>
+		  				This case is usually not considered.
+					</ul>
+				</p>
+		</div>
+	 	<div class="row">
+    		<div class="col">
+      			Advantages
+      			<ul>
+      				<li>1</li>
+      				<li>2</li>
+      				<li>3</li>
+      				<li>4</li>
+      			</ul>
+   			</div>
+    		<div class="col">
+      			Disadvantages
+      			<ul>
+      				<li>1</li>
+      				<li>2</li>
+      				<li>3</li>
+      				<li>4</li>
+      			</ul>
+    		</div>
+ 		</div>
 	<h3>Lock-Free Algorithm</h3>
 </div>
 <div class="container">
