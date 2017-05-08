@@ -17,7 +17,7 @@ public class LockFreeRBTree implements RBTree{
 			return Integer.MIN_VALUE;
 		}
 		LockFreeRBNode temp = root;
-		while (temp != null && temp.getValue() > 0) {
+		while (temp != null && temp.getValue() >= 0) {
 			if (value < temp.getValue()) {
 				temp = temp.getLeft();
 			}else if (value > temp.getValue()) {
@@ -36,7 +36,7 @@ public class LockFreeRBTree implements RBTree{
 		while (true) {
 			temp1 = this.root;
 			temp2 = null;
-			while (temp1 != null && temp1.getValue() > 0) {
+			while (temp1 != null && temp1.getValue() >= 0) {
 				temp2 = temp1;
 				if (value < temp1.getValue()) {
 					temp1 = temp1.getLeft();

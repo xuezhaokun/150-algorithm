@@ -1,6 +1,6 @@
 package parallel_rbtree;
 
-public class LockedRBNode {
+public class LockedRBNode{
 	private int value;
 	private LockedRBNode left;
 	private LockedRBNode right;

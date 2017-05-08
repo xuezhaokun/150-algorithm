@@ -2,7 +2,7 @@ package parallel_rbtree;
 
 import java.util.concurrent.atomic.*;
 
-public class LockFreeRBNode {
+public class LockFreeRBNode{
 	private int value;
 	private LockFreeRBNode left;
 	private LockFreeRBNode right;

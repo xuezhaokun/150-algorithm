@@ -39,7 +39,7 @@ public class TestTrees {
 				duration = end - start;
 				//locked_time += duration;
 				//locked_tree.print();
-				//System.out.println("");
+				System.out.println("");
 				System.out.println("RBTree each thread insert "+insert_nodes_per_thread+" nodes using " +(double)duration + " ms");
 				System.out.println("----------------------------------");
 		    
@@ -62,7 +62,7 @@ public class TestTrees {
 				duration = end - start;
 				//lock_free_time += duration;
 				//lock_free_tree.print();
-				//System.out.println("");
+				System.out.println("");
 				System.out.println("LockFreeRBTree each thread insert "+insert_nodes_per_thread+" nodes using " +(double)duration + " ms");
 		        System.out.println("\n\rLock-Free Red-Black Tree Search test");
 		       //tree2.print();
