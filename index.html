@@ -7,18 +7,34 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<style>
+#case-table { border: none; border-collapse: collapse; }
+#case-table td { border-left: 1px solid #000; border-bottom: none; border-top: none}
+#case-table td:first-child { border-left: none; }
+#case-table th { border-left: 1px solid #000;  border-bottom: none; border-top: none}
+#case-table th:first-child { border-left: none;}
+.borderless td, .borderless th {
+    border: none;
+}
+body{
+	font-size: 16px;
+}
+</style>
 </head>
 
 <body>
-<div class="container">
-	<h1>Parallel Algorithm For Red-Black Trees</h1>
-	<h2>Zhaokun Xue</h2>
+<div class="container" style="text-align: center">
+	<div class="row">
+		<h1>Parallel Algorithm For Red-Black Trees</h1>
+		<h3>Zhaokun Xue</h3>
+		<h4><a href="mailto:Zhaokun.Xue@tufts.edu">Zhaokun.Xue@tufts.edu</a></h4>
+	</div>
 </div>
 <div class="container">
 	<div class="row">
 		<h2>Introduction</h2>
 		<p>
-			In our previous study, we have done detailed analysis for basic operations of the red-black tree based on the traditional sequential algorithm. In this project, I am going to apply parallel algorithm to implement red-black tree‘s operations, search and insertion. And I will compare the performance of search and insertion operations for lock-based and lock-free parallel algorithms. 
+			In our previous study, we have done detailed analysis for basic operations of the red-black tree based on the traditional sequential algorithm. In this project, I am going to apply parallel algorithm to implement red-black tree's operations, search and insertion. And I will compare the performance of search and insertion operations for lock-based and lock-free parallel algorithms. 
 		</p>
 		<p>
 			The red-black tree is a balanced binary search tree with height O(log <i>n</i>), and efficient search, insertion, and deletion operations, which makes it a better choice than regular binary search in search-intensive applications. And it only requires few rotations to rebalance the tree and keep it red-black properties.
@@ -28,64 +44,286 @@
 <div class="container">
 	<div class="row">
 		<h2>Parallel Algorithm</h2>
+		<p>
+			<i>"A parallel algorithm, as opposed to a traditional sequential algorithm, is an algorithm which can be executed a piece at a time on many different processing devices, and then combined together again at the end to get the correct result."</i>
+		</p>
+		<p>
+			People usually build cost-effective parallel algorithms by defining multiple operations on each step to improve the performance of traditional sequential algorithm, which specifies a sequence of operations and each step does one operation.
+		</p>
+		<h3>Lock-Based Algorithm</h3>
+		<p>
+			<i>"A lock or mutex (from mutual exclusion) is a synchronization mechanism for enforcing limits on access to a resource in an environment where there are many threads of execution."</i>
+		</p>
+		<p>
+			Lock-based parallel algorithms are usually implemented on the parallel random-access machine (PRAM), which is a shared-memory model of parallel computation that consists of a collection of identical processors and a shared memory. There are four types of PRAM.
+			<ul>
+  				<li><b>EREW (exclusive read exclusive write)</b></li>
+  				Conccurents are not allowed to read and write to the same memory location at the same time.
+  				<li><b>CREW (concurrent read exclusive write)</b></li>
+  				Conccurents can only read a memory location.
+  				<li><b>CRCW (concurrent read concurrent write)</b></li>
+  				Concurrents allows both concurrent reads and concurrent writes to a memory location
+  				<li><b>ERCW (Exclusive read concurrent write)</b></li>
+  				This case is usually not considered.
+			</ul>
+		</p>
+	</div>
+	<div class="row">
+		<table class="table borderless">
+			<thead>
+				<tr>
+					<th>Advantages</th>
+					<th>Disadvantages</th>
+				</tr>
+			</thead>
+			</tbody>
+				<tr>
+					<td>
+						<ul>
+							<li>
+								Simple to use
+							</li>
+							<li>
+								Ubiquitous
+							</li>
+							<li>
+								Easily to amenable to performance analysis
+							</li>
+						</ul>
+					</td>
+					<td>
+						<ul>
+							<li>
+								Potential for deadlock
+							</li>
+							<li>
+								Unavoidable overhead at each synchronization point, which usually can be a system call
+							</li>
+							<li>
+								Possible scheduling anomalies (such as priority inversion), where high-priority processes are delayed waiting for a lock held by a low-priority process
+							</li>
+							<li>
+								Convoying, where a delayed process holding a lock effectively blocks all other processes waiting for the lock
+							</li>
+						</ul>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+ 	</div>
+ 	<div class="row">
+		<h3>Lock-Free Algorithm</h3>
+		<p>
+			Opposite to lock-based algorithms, lock-free algorithms are used to implement concurrents' operations without using "lock" or "mutex". 
+		</p>
+		<table class="table borderless">
+			<thead>
+				<tr>
+					<th>Advantage</th>
+					<th>Disadvantage</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						Lock-free algorithms avoid problems in lock-based algorithms.
+					</td>
+					<td>
+						Lock-free algorithms are usually hard to implement, especially for complicate data structre.
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<h4>CAS (Compare and Swap)</h4>
+		<p>
+			The lock-free strategy I am going to use in this project is called <b><i>CAS (Compare and Swap)</i></b>.<br />
+			"Rather than acquiring a lock, a process makes a copy of the data it wishes to modify, changes the copy and then replaces the original data with the copy only if the original data is unchanged. If there is no contention, the update is made with no appreciable overhead. If there is contention, all but one concurrent process accessing the shared data must “roll-back” and redo its computation using the updated data." Most modern programming languages support <i>CAS</i> as an atomic operatio. For example, in this project, I am going to use JAVA's <i>AtomicBoolean</i> class to realize the CAS strategy.
+			The following piece of pesudocode just demonstrates how CAS function works.
+			<pre>
+CAS(shVble,savedValue,newValue)
+Begin Atomic
+if (shVble==savedValue) {
+    shVble=newValue;
+    return True;
+} else {
+    return False; 
+}
+End Atomic
+
+do  {
+    savedValue=shVble;
+    newValue=computeNewValue(savedValue);
+}while (!CAS(shVble,savedValue,newValue));
+			</pre>
+
+		</p>
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+		<h2>Red-Black Trees</h2>
+		<p>
+			<img src="https://upload.wikimedia.org/wikipedia/commons/6/66/Red-black_tree_example.svg" alt="red-black tree" width="40%" height="200" align="right">
+			<ul>
+				<li>
+					Nodes are colored red or black
+				</li>
+				<li>
+					Root is always black
+				</li>
+				<li>
+					Add black "dummy" leaves so every "real" node has 2 children
+				</li>
+				<li>
+					Every red node has a black parent
+				</li>
+				<li>
+					For any node x: all paths down to leaves contain equal number of black nodes
+				</li>
+			</ul>
+		</p>
+	</div>
+	<div class="row">
+		<h3>Operations</h3>
+		<p>
+			For this project purpose, I just focus on <i>search</i> and <i>insertion</i> operations on red-black tree.
+		</p>
+		<h4>Search</h4>
+		<p>
+			Just like any regular binary search tree, we use recursion on search operation. 
+		</p>
+		<div class"row">
+			<h4>Insertion</h4>
 			<p>
-				<i>"A parallel algorithm, as opposed to a traditional sequential algorithm, is an algorithm which can be executed a piece at a time on many different processing devices, and then combined together again at the end to get the correct result."</i>
+				Before working on the details of the <i>insertion</i> operation, we need to introduction an important helper operation, <i><b>rotation</i></b> for red-black tree.
 			</p>
+			<table class="table">
+				<tbody>
+					<tr>
+						<td>
+							<pre>
+Left_Rotate(T,x) {
+    y = right[x];
+    right[x] = left[y];
+    p[left[y]] = x;
+    p[y] = p[x];
+    if (p[x] == p[root]) 
+        root[T] = y;
+    else if (x == left[p[x]])
+        left[p[x]] = y;
+    else 
+        right[p[x]] = y;
+    left[y] = x;
+    p[x] = y;
+}
+							</pre>
+						</td>
+						<td>
+							<img src="https://upload.wikimedia.org/wikipedia/commons/3/31/Tree_rotation_animation_250x250.gif" alt="rotation" width="300" height="300" align="middle">
+						</td>
+						<td> 
+							<pre>
+Right_Rotate(T,y) {
+    x = left[y];
+    left[y] = right[x];
+    p[right[x]] = y;
+    p[x] = p[y];
+    if (p[y] == p[root]) 
+        root[T] = x;
+    else if (y == left[p[y]])
+        left[p[y]] = x;
+    else 
+        right[p[y]] = x;
+    right[x] = y;
+    p[y] = x;
+}
+							</pre>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			<p>
-				People usually build cost-effective parallel algorithms by defining multiple operations on each step to improve the performance of traditional sequential algorithm, which specifies a sequence of operations and each step does one operation.
+				When we insert a new node to the red-black tree, the first step is pythically insert the node to tree as we do for regular binary search tree, and color the node to red. Then we need to fix the tree's red-black properties from the inserted node up to the root. There are three cases for the fix-up operation:
+				<table class="table" id="case-table">
+					<thead>
+						<tr>
+							<th>
+								Case 1: The uncle of inserted node is <font color="red">red</font>.
+							</th>
+							<th>
+								Case 2: The inserted node is right child of its parent and its uncle is black.
+							</th>
+							<th>
+								Case 3: The inserted node is left child of its parent and its uncle is black.
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Red-black_tree_insert_case_3.svg" alt="case 1" width="400" height="200" align="middle">
+							</td>
+							<td>
+								<img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Red-black_tree_insert_case_4.svg" alt="case 2" width="400" height="200" align="middle">
+								
+							</td>
+							<td>
+								<img src="https://upload.wikimedia.org/wikipedia/commons/d/dc/Red-black_tree_insert_case_5.svg" alt="case 3" width="400" height="200" align="middle">
+							</td>
+						</tr>
+						<tr>
+							<td>
+								For case 1, we just need to recolor the inserted node, its parent, uncle and its grandparent.
+							</td>
+							<td>
+								We can to a left rotation on the inserted node's parent to turn it to case 3. And switch label for the parent and inserted node.
+							</td>
+							<td>
+								In case 3, we first do a right rotation on the inserted node's parent, then recolor parent and grandparent.
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</p>
-			<h3>Lock-Based Algorithm</h3>
-				<p>
-					<i>"A lock or mutex (from mutual exclusion) is a synchronization mechanism for enforcing limits on access to a resource in an environment where there are many threads of execution."</i>
-				</p>
-				<p>
-					Lock-based parallel algorithms are usually implemented on the parallel random-access machine (PRAM), which is a shared-memory model of parallel computation that consists of a collection of identical processors and a shared memory. There are four types of PRAM.
-					<ul>
-		  				<li><b>EREW (exclusive read exclusive write)</b></li>
-		  				Conccurents are not allowed to read and write to the same memory location at the same time.
-		  				<li><b>CREW (concurrent read exclusive write)</b></li>
-		  				Conccurents can only read a memory location.
-		  				<li><b>CRCW (concurrent read concurrent write)</b></li>
-		  				Concurrents allows both concurrent reads and concurrent writes to a memory location
-		  				<li><b>ERCW (Exclusive read concurrent write)</b></li>
-		  				This case is usually not considered.
-					</ul>
-				</p>
 		</div>
-	 	<div class="row">
-    		<div class="col">
-      			Advantages
-      			<ul>
-      				<li>1</li>
-      				<li>2</li>
-      				<li>3</li>
-      				<li>4</li>
-      			</ul>
-   			</div>
-    		<div class="col">
-      			Disadvantages
-      			<ul>
-      				<li>1</li>
-      				<li>2</li>
-      				<li>3</li>
-      				<li>4</li>
-      			</ul>
-    		</div>
- 		</div>
-	<h3>Lock-Free Algorithm</h3>
+	</div>
 </div>
 <div class="container">
-	<h2>Red-Black Trees</h2>
-	<h3>Operations</h3>
-	<h4>Search</h4>
-	<h4>Insertion</h4>
-	<h4>Rotation</h4>
+	<div class="row">
+		<h2>Implementation</h2>
+		<p>
+			I programmed in JAVA for this project. I use JAVA's "<i>Thread</i> to simulate concurrents' operatins. And use "<i>ReentrantLock</i>" lock class to implement EREW lock- based synchronization. For lock-free CAS operation, I use "<i>AtomicBoolean</i>" class which provides the convenience for doing the CAS atomic operation. My lock-free implementation is based on the idea of Ma's Algorithm and pseudocode provided in Kim's paper.
+		</p>
+	</div>
+	<div class="row">
+		<h3>Ma's Algorithm</h3>
+		<p>
+			Ma’s algorithm is built upon the basic sequential insertion algorithm with the addition of a “local area” concept and the use of lock-free primitives to control concurrency. And Ma also adds an extra <i>flag</i> field to each node to indicate whether a process gains control of the node, which is used for CAS operation check.
+		</P>
+		<h4>Local Area</h4>
+		<p>
+			<img src="img/local_area.png" alt="local area" width="45%" height="200" align="right">
+			The local area consists of the set of the set of nodes that a process must have full control of
+			to ensure successful completion of an operation. As we see, the local area for insertion is just made of nodes involed in the rotation fixup operation. With the local area concept, if several processes in a localized region have overlapping areas, only the one process that obtains all the flags in its local area will be able to proceed. Other processes will have to re-attempt to gain control of their local areas. As one insertion process completes its processing in one part of the tree, it may either finish entirely (and release all its flags) or move up the tree. In the latter case, the process first obtains the flags of nodes in its new local area, moves up, and then releases the flags that it set for the nodes in its old local area. Releasing flags allows other processes that may have been waiting to advance.
+
+		</p>
+		<p>
+			<img src="img/insertion_pseudo.png" alt="insertion" width="45%" height="550" align="right">
+			With the idea of Ma's Algorithm, I add the <i>flag</i> field to my "LockFreeRBNode" object. And the code for <i>CAS</i> and <i>SetupLocalAreaForInsert</i> functions to the regular sequential insertion operation. Here the pseudocode for changes in <i>inerstion</i> functuion.
+			<img src="img/object.png" alt="insertion" width="55%" height="300" align="left">
+		</p>
+	</div>
 </div>
 <div class="container">
-	<h2>Implementation</h2>
-	<h3>Ma's Algorithm</h3>
-	<h3>CAS</h3>
+	<div class="row">
+		<h2>Experiment Results</h2>
+		For each experiment, I ran my program 10 times, and took the average time as the result.
+		<h3>Insert 1000 nodes to an empty red-black tree</h3>
+		<h3>Search 100 times from the tree</h3>
+		<h3>Use 4 threds to insert nodes</h3>
+	</div>
 </div>
+
 </body>
 
 </html>
