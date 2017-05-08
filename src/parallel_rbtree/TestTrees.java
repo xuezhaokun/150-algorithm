@@ -17,7 +17,7 @@ public class TestTrees {
 			//while (counter < 10) {
 				long start = 0, end = 0, duration = 0;
 				int num_threads = 4;
-				int insert_nodes_per_thread = 200;
+				int insert_nodes_per_thread = 1000;
 			
 				List<Thread> threads = new ArrayList<Thread>();
 				Lock lock = new ReentrantLock();
@@ -88,7 +88,7 @@ public class TestTrees {
 		       for(Thread thread: threads) thread.start();
 		       for(Thread thread: threads) thread.join();
 		       duration = System.currentTimeMillis() - start;
-		       System.out.println("LockFreeRBTree each thread search 100 times using " +(double)duration + " ms");
+		       System.out.println("LockFreeRBTree each thread search 10000 times using " +(double)duration + " ms");
 	}
 
 }

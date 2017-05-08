@@ -32,7 +32,7 @@ public class SearchThread extends Thread{
 	@Override
 	public void run(){
 		Random rand = new Random();
-		for(int i=0;i<100;i++){
+		for(int i=0;i<10000;i++){
 			if(lock != null) lock.lock();
 			Integer target = rand.nextInt(nodes*num);
 			//System.out.println("Thread "+id+" search "+target);
