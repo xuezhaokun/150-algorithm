@@ -93,39 +93,39 @@ public class TestTrees {
 				}
 
 				
-//				System.out.println("\n\rLock-Free Red-Black Tree Search test");
-//		       //tree2.print();
-//		       //System.out.println("");
-//		      // tree1.print();
-//		      // System.out.println("");
-//		       
-//				locked_threads.clear();
-//		       for(int i = 0;i<num_threads;i++){
-//		    	   		locked_threads.add(new SearchThread(locked_tree,num_threads, insert_nodes_per_thread, lock));
-//		       }
-//		       start = System.currentTimeMillis(); 
-//		       for(Thread thread: locked_threads) {
-//		    	   		thread.start();
-//		       }
-//		       for(Thread thread: locked_threads){
-//		    	   	thread.join();
-//		       }
-//		       duration = System.currentTimeMillis() - start;
-//		       System.out.println("RBTree each thread search 10000 times using " +(double)duration + " ms");
-//		       
-//		       lock_free_threads.clear();
-//		       for(int i = 0;i<num_threads;i++){
-//		    	   lock_free_threads.add(new SearchThread(lock_free_tree, num_threads, insert_nodes_per_thread));
-//		       }
-//		       start = System.currentTimeMillis();
-//		       for(Thread thread: lock_free_threads) {
-//		    	   		thread.start();
-//		       }
-//		       for(Thread thread: lock_free_threads){
-//		    	   		thread.join();
-//		       }
-//		       duration = System.currentTimeMillis() - start;
-//		       System.out.println("LockFreeRBTree each thread search 10000 times using " +(double)duration + " ms");
+				System.out.println("\n\rLock-Free Red-Black Tree Search test");
+		       //tree2.print();
+		       //System.out.println("");
+		      // tree1.print();
+		      // System.out.println("");
+		       
+				locked_threads.clear();
+		       for(int i = 0;i<num_threads;i++){
+		    	   		locked_threads.add(new SearchThread(locked_tree,num_threads, insert_nodes_per_thread, lock));
+		       }
+		       start = System.currentTimeMillis(); 
+		       for(Thread thread: locked_threads) {
+		    	   		thread.start();
+		       }
+		       for(Thread thread: locked_threads){
+		    	   	thread.join();
+		       }
+		       duration = System.currentTimeMillis() - start;
+		       System.out.println("RBTree each thread search 10000 times using " +(double)duration + " ms");
+		       
+		       lock_free_threads.clear();
+		       for(int i = 0;i<num_threads;i++){
+		    	   lock_free_threads.add(new SearchThread(lock_free_tree, num_threads, insert_nodes_per_thread));
+		       }
+		       start = System.currentTimeMillis();
+		       for(Thread thread: lock_free_threads) {
+		    	   		thread.start();
+		       }
+		       for(Thread thread: lock_free_threads){
+		    	   		thread.join();
+		       }
+		       duration = System.currentTimeMillis() - start;
+		       System.out.println("LockFreeRBTree each thread search 10000 times using " +(double)duration + " ms");
 	}
 
 }
