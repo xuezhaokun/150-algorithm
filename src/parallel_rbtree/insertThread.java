@@ -26,7 +26,7 @@ public class insertThread extends Thread{
 	@Override
 	public void run() {
 		for (int value : values) {
-			System.out.println("Thread "+id+" add "+ value);
+			//System.out.println("Thread "+id+" add "+ value);
 			if (lock != null) lock.lock();
 			try {
 				this.rbTree.insert(value);

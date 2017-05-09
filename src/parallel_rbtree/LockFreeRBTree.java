@@ -44,7 +44,7 @@ public class LockFreeRBTree implements RBTree{
 					temp1 = temp1.getRight();
 				}
 			}
-			if (!SetupLocalAreaForInsert(temp2)) {
+			if (!setupLocalAreaForInsert(temp2)) {
 				temp2.flag.set(false); 
 				continue;
 			} else {
@@ -66,7 +66,7 @@ public class LockFreeRBTree implements RBTree{
 		rbInsertFixup(insertedNode);	
 	}
 	
-	private boolean SetupLocalAreaForInsert(LockFreeRBNode x) {
+	private boolean setupLocalAreaForInsert(LockFreeRBNode x) {
 		if (x == null) {
 			return true;
 		}
@@ -133,7 +133,7 @@ public class LockFreeRBTree implements RBTree{
 					x.getParent().setRed(false);
 					temp.setRed(false);
 					x.getParent().getParent().setRed(true);
-					x = MoveLocalAreaUpward(x, local_area);
+					x = moveLocalAreaUpward(x, local_area);
 				} else {
 					if (x == x.getParent().getRight()) {
 						// Case 2
@@ -159,7 +159,7 @@ public class LockFreeRBTree implements RBTree{
 					x.getParent().setRed(false);
 					temp.setRed(false);
 					x.getParent().getParent().setRed(true);
-					x = MoveLocalAreaUpward(x, local_area);
+					x = moveLocalAreaUpward(x, local_area);
 				} else {
 					if (x == x.getParent().getLeft()) {
 						// Case 2
@@ -181,7 +181,7 @@ public class LockFreeRBTree implements RBTree{
 		}
 	}
 	
-	private LockFreeRBNode MoveLocalAreaUpward(LockFreeRBNode x, ArrayList<LockFreeRBNode> working) {
+	private LockFreeRBNode moveLocalAreaUpward(LockFreeRBNode x, ArrayList<LockFreeRBNode> working) {
 		LockFreeRBNode parent = x.getParent();
 		LockFreeRBNode grandparent = parent.getParent();
 		LockFreeRBNode uncle;
