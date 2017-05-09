@@ -67,5 +67,12 @@ public class LockFreeRBNode{
 	public void setRed(boolean isRed) {
 		this.isRed = isRed;
 	}
-	
+
+	public int height(){
+		if(this==null)return 0;
+		return (1+ Math.max(this.getLeft().height(),this.getRight().height()));
+	}
+	public void displayNode(LockFreeRBNode n) {
+		System.out.print(n.getValue() + " ");
+	}
 }

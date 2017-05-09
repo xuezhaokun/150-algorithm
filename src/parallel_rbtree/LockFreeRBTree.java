@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class LockFreeRBTree implements RBTree{
-	int size = 0;
-	LockFreeRBNode root;
+	public int size = 0;
+	public LockFreeRBNode root;
 	
 	public LockFreeRBTree() {
 		this.root = new LockFreeRBNode();
@@ -265,6 +265,32 @@ public class LockFreeRBTree implements RBTree{
 		y.setParent(x);
 	}
 	
+	
+	public int getheight(LockFreeRBNode root) {
+		if (root == null)
+			return 0;
+		return Math.max(getheight(root.getLeft()), getheight(root.getRight())) + 1;
+	}
+
+
+	public void preOrder(LockFreeRBNode n ){
+		
+		if (n == null)
+			return;
+		n.displayNode(n);
+		preOrder(n.getLeft());
+		preOrder(n.getRight());
+	}
+
+	public void breadth(LockFreeRBNode n ){
+		
+		if (n == null)
+			return;
+		n.displayNode(n);
+		preOrder(n.getLeft());
+		preOrder(n.getRight());
+	}
+	
 	public synchronized void print() {
 		List<List<String>> res = new LinkedList<List<String>>();
 		res = printHelp(root,0,res);
@@ -272,7 +298,7 @@ public class LockFreeRBTree implements RBTree{
 		//System.out.println("Thread "+id+"printing:");
 		for (List<String> list:res) {
 			for (String word: list) {
-				System.out.print(word+" ");
+				System.out.print(word + " ");
 			}
 			System.out.print("\n");
 		}
@@ -288,9 +314,9 @@ public class LockFreeRBTree implements RBTree{
 			list = res.get(height);
 		}
 		if (root.getValue() < 0) {
-			list.add(" _ ");
+			list.add(" nil ");
 		} else {
-			list.add(root.getValue()+(root.isRed()?"_R":"_B")+(root.flag.get()?"T":"F"));
+			list.add(root.getValue()+(root.isRed()?"(R)":"(B)"));
 		}
 		printHelp(root.getLeft(),height+1,res);
 		printHelp(root.getRight(),height+1,res);

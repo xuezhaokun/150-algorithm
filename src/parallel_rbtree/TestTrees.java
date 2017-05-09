@@ -1,9 +1,14 @@
 package parallel_rbtree;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import javax.swing.JFrame;
+
+import drawer.TreeGUI;
 
 
 public class TestTrees {
@@ -16,13 +21,13 @@ public class TestTrees {
 			long lock_free_time = 0;
 			//while (counter < 10) {
 				long start = 0, end = 0, duration = 0;
-				int num_threads = 4;
-				int insert_nodes_per_thread = 1000;
+				int num_threads = 2;
+				int insert_nodes_per_thread = 10;
 			
 				List<Thread> threads = new ArrayList<Thread>();
 				Lock lock = new ReentrantLock();
 				threads.clear();
-				RBTree locked_tree = new LockedRBTree();
+				LockedRBTree locked_tree = new LockedRBTree();
 			
 				for (int i = 0; i < num_threads; i++) {
 					int[] values = new int[insert_nodes_per_thread];
@@ -44,7 +49,7 @@ public class TestTrees {
 				System.out.println("----------------------------------");
 		    
 				threads.clear();
-				RBTree lock_free_tree = new LockFreeRBTree();
+				LockFreeRBTree lock_free_tree = new LockFreeRBTree();
 				for (int i = 0; i < num_threads; i++) {
 					int[] values = new int[insert_nodes_per_thread];
 					for (int j = 0; j < insert_nodes_per_thread; j++) {
@@ -62,9 +67,13 @@ public class TestTrees {
 				duration = end - start;
 				//lock_free_time += duration;
 				//lock_free_tree.print();
-				System.out.println("");
+				//System.out.println("");
 				System.out.println("LockFreeRBTree each thread insert "+insert_nodes_per_thread+" nodes using " +(double)duration + " ms");
-		        System.out.println("\n\rLock-Free Red-Black Tree Search test");
+				lock_free_tree.breadth(lock_free_tree.root);
+
+				TreeGUI gui = new TreeGUI(lock_free_tree);
+				
+				System.out.println("\n\rLock-Free Red-Black Tree Search test");
 		       //tree2.print();
 		       //System.out.println("");
 		      // tree1.print();

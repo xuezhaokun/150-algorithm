@@ -34,13 +34,13 @@ body{
 	<div class="row">
 		<h2>Introduction</h2>
 		<p>
-			In our previous study, we have done detailed analysis for basic operations of the red-black tree based on the traditional sequential algorithm. In this project, I am going to apply parallel algorithm to implement red-black tree's operations, search and insertion. And I will compare the performance of search and insertion operations for lock-based and lock-free parallel algorithms. 
+			In our previous study, we have done a lot of detailed analysis of basic operations for the red-black tree based on the traditional sequential algorithm. In this project, I am going to apply parallel algorithm to implement red-black tree's operations, <i>search</i> and <i>insertion</i>. And I will compare the performance of search and insertion operations for lock-based and lock-free synchronization. 
 		</p>
 		<p>
 			The red-black tree is a balanced binary search tree with height O(log <i>n</i>), and efficient search, insertion, and deletion operations, which makes it a better choice than regular binary search in search-intensive applications. And it only requires few rotations to rebalance the tree and keep it red-black properties.
 		</p>
 		<p>
-			As we known, it takes O(log <i>n</i>) for search and insertion operations in sequential algorithms. By applying parallel algorithms, the search and insertion time would be O(log <i>n</i> + log<i>k</i>), where <i>k</i> is the number threads/concurrents. Although they both have the upper bound O(log <i>n</i>), and parallel algorithm even have another add-on term <i>log k</i>, parallel algorithms would provide a smaller coefficient for the big-O notation. And in my project, I compared the experiments results on lock-based and lock-free parallel algorithms, and I found lock-free synchronization has a better performance. 
+			As we known, it takes O(log <i>n</i>) for red-black tree's search and insertion operations by sequential algorithms. As for using parallel algorithms, the search and insertion time would be O(log <i>n</i> + log<i>k</i>), where <i>k</i> is the number threads/concurrents. Although they both have the upper bound O(log <i>n</i>), and parallel algorithm even have another add-on term <i>log k</i>, parallel algorithms would provide a smaller coefficient for the big-O notation. And in my project, I will compare the performance on lock-based and lock-free parallel algorithms, and I will claim that lock-free synchronization has a better performance than lock-based. 
 		</p>
 	</div>
 </div>
@@ -295,13 +295,13 @@ Right_Rotate(T,y) {
 	<div class="row">
 		<h2>Implementation</h2>
 		<p>
-			I programmed in JAVA for this project. I use JAVA's "<i>Thread</i> to simulate concurrents' operations. And use "<i>ReentrantLock</i>" lock class to implement EREW lock- based synchronization. For lock-free CAS operation, I use "<i>AtomicBoolean</i>" class which provides the convenience for doing the CAS atomic operation. My lock-free implementation is based on the idea of Ma's Algorithm and pseudocode provided in Kim's paper.
+			I programmed in JAVA for this project. I use JAVA's "<i>Thread</i> to simulate concurrents' operations. And use "<i>ReentrantLock</i>" lock class to implement EREW lock- based synchronization. For lock-free CAS operation, I use "<i>AtomicBoolean</i>" class which provides the convenience for doing the CAS atomic operation. My lock-free implementation is based on the idea of Ma's Algorithm and pseudocode provided in Kim's paper. Finally, I modify the code of treeGUI from Github to provide a small JFrame visualization to display the red-black tree built by my algorithm. As the code limits, the visualization only works and layouts fine for small data set, for example 20-node trees.
 		</p>
 	</div>
 	<div class="row">
 		<h3>Ma's Algorithm</h3>
 		<p>
-			Ma’s algorithm is built upon the basic sequential insertion algorithm with the addition of a "local area" concept and the use of lock-free primitives to control concurrency. And Ma also adds an extra <i>flag</i> field to each node to indicate whether a process gains control of the node, which is used for CAS operation check.
+			Ma's algorithm is built upon the basic sequential insertion algorithm with the addition of a "local area" concept and the use of lock-free primitives to control concurrency. And Ma also adds an extra <i>flag</i> field to each node to indicate whether a process gains control of the node, which is used for CAS operation check.
 		</P>
 		<h4>Local Area</h4>
 		<p>
@@ -320,7 +320,23 @@ Right_Rotate(T,y) {
 <div class="container">
 	<div class="row">
 		<h2>Experiment Results</h2>
-		For each experiment, I ran my program 10 times, and took the average time as the result. 
+		<h3>Sample Output for visualization</h3>
+		I did the visualization for lock-free algorithm. The graph on the left shows the 20-node red-black tree built by my lock-free algorithm. And the figure on the right shows the concurrents flow.<br />
+		<table class="table borderless">
+			<tbody>
+				<tr>
+					<td>
+						<img src="img/rbtree_demo.png" alt="rbtree demo" width="700" height="500" align="middle">
+					</td>
+					<td>
+						<img src="img/threads_log.png" alt="threads" width="400" height="300" align="middle">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<br />
+		Then I did experiments for testing the performance, I ran my program 10 times, and took the average time as the result. 
 		<h3>Insert 1000 nodes to an empty red-black tree</h3>
 		In this experiment I totally insert 1000 nodes to an empty red-black tree by using different number of threads. For example, when the number of threads is 10, it means each thread inserts 100 nodes to the tree.<br /> 
 		<img src="img/insertion_nodes_pic.png" alt="insertion node" width="50%" height="300" align="middle">
@@ -336,7 +352,7 @@ Right_Rotate(T,y) {
 	<div class="row">
 		<h2>Conclusion and Future Work</h2>
 		<p>
-			According to my implementation and experiment results, we can reach the conclusion that lock-free algorithms have a better performance on <i>search</i> and <i>insertion</i> operations on relatively large red-black tree, especially on insertion. When the tree gets larger, the performance difference would be larger. For future work, we can work on implementing lock-free algorithm for <i>deletion</i> operation. Since red-black trees store information not only on leaf nodes but also internal nodes, <i>deletion</i> on red-black trees would result in a more complex structural change, which makes the implementation much harder. Another thing we can do in the future is to find a way to visualize the process for lock-free insertion, which could give users a more straightforward demonstration on how these concurrents work. In addition, in Kim's paper, he proposed an improved version on Ma's algorithm, which needs fewer CAS operations by defining a larger "local area." We might try out his method, and compare the performance with the original Ma's algorithm. We can also study the better concurrent control method "wait-free" to improve the performance for lock-free synchronization.
+			According to my implementation and experiment results, we can reach the conclusion that lock-free algorithms have a better performance on <i>search</i> and <i>insertion</i> operations on relatively large red-black tree. When the tree gets larger, the performance difference would be more obvious. For future work, we can work on implementing lock-free algorithm for <i>deletion</i> operation. Since red-black trees store information not only on leaf nodes but also internal nodes, <i>deletion</i> on red-black trees would result in a more complex structural change, which makes the implementation much harder. Another thing we can do in the future is to find a way to visualize the process for lock-free insertion, which could give users a more straightforward demonstration on how these concurrents work. In addition, in Kim's paper, he proposed an improved version on Ma's algorithm, which needs fewer CAS operations by defining a larger "local area." We might try out his method, and compare the performance with the original Ma's algorithm. We can also study the better concurrent control method "wait-free" to improve the performance for lock-free synchronization.
 		</p>
 	</div>
 </div>

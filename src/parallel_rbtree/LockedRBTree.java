@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class LockedRBTree implements RBTree{
-	int size = 0;
-	LockedRBNode root;
+	public int size = 0;
+	public LockedRBNode root;
 	
 	public LockedRBTree() {
 		this.root = null;
@@ -169,9 +169,9 @@ public class LockedRBTree implements RBTree{
 			list = res.get(height);
 		}
 		if (root.getValue() < 0) {
-			list.add(" _ ");
+			list.add(" nil ");
 		} else {
-			list.add(root.getValue()+(root.isRed()?"_R":"_B"));
+			list.add(root.getValue()+(root.isRed()?"(R)":"(B)"));
 		}
 		printHelp(root.getLeft(),height+1,res);
 		printHelp(root.getRight(),height+1,res);
