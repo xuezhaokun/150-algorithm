@@ -14,7 +14,7 @@ public class LockedRBTree implements RBTree{
 	public synchronized int search(int value) {
 		if (root == null) return Integer.MIN_VALUE;
 		LockedRBNode temp = root;
-		while (temp != null && temp.getValue() >= 0) {
+		while (temp != null) {
 			if (value < temp.getValue()) {
 				temp = temp.getLeft();
 			} else if (value > temp.getValue()) {
@@ -42,6 +42,7 @@ public class LockedRBTree implements RBTree{
 			insertedNode.getRight().setParent(insertedNode);
 			return insertedNode;
 		}
+		
 		LockedRBNode temp = root;
 		while (temp.getValue() >= 0) {
 			if (value < temp.getValue()) {
@@ -52,14 +53,13 @@ public class LockedRBTree implements RBTree{
 				return null;
 			}
 		}
+		
 		if (temp == temp.getParent().getLeft()) {
 			temp.getParent().setLeft(insertedNode);
 		} else {
 			temp.getParent().setRight(insertedNode);
 		}
 		insertedNode.setParent(temp.getParent());
-		insertedNode.setLeft(new LockedRBNode());
-		insertedNode.setRight(new LockedRBNode());
 		insertedNode.getLeft().setParent(insertedNode);
 		insertedNode.getRight().setParent(insertedNode);
 		return insertedNode;	

@@ -21,8 +21,8 @@ public class LockFreeRBNode{
 	
 	public LockFreeRBNode(int value){
 		this.value = value;
-		this.left = null;
-		this.right = null;
+		this.left = new LockFreeRBNode();
+		this.right = new LockFreeRBNode();
 		this.parent = null;
 		this.isRed = true;
 		this.flag = new AtomicBoolean(false);

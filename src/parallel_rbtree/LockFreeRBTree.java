@@ -36,7 +36,7 @@ public class LockFreeRBTree implements RBTree{
 		while (true) {
 			temp1 = this.root;
 			temp2 = null;
-			while (temp1 != null && temp1.getValue() >= 0) {
+			while (temp1.getValue() >= 0) {
 				temp2 = temp1;
 				if (value < temp1.getValue()) {
 					temp1 = temp1.getLeft();
@@ -60,8 +60,8 @@ public class LockFreeRBTree implements RBTree{
 		} else {
 			temp2.setRight(insertedNode);
 		}
-		insertedNode.setLeft(new LockFreeRBNode());
-		insertedNode.setRight(new LockFreeRBNode());
+		insertedNode.getLeft().setParent(insertedNode);
+		insertedNode.getRight().setParent(insertedNode);
 		insertedNode.setRed(true);
 		rbInsertFixup(insertedNode);	
 	}

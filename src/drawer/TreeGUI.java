@@ -27,7 +27,7 @@ public class TreeGUI extends JFrame {
 	 */
 	public TreeGUI(LockFreeRBTree tree) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000, 1000);
+		setBounds(100, 100, 3000, 3000);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -53,7 +53,7 @@ class DrawTree extends JPanel{
 	protected void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
 	
-		g.setFont(new Font("Tahoma", Font.BOLD, 20));
+		g.setFont(new Font("Tahoma", Font.BOLD, 10));
 		//g.drawString(String.valueOf(tree.root.data), this.getWidth()/2, 30);
 		
 
@@ -62,35 +62,7 @@ class DrawTree extends JPanel{
 		DrawTree(g, 0, getWidth(), 0, getHeight() / tree.getheight(tree.root), tree.root);
 	}
 	
-//	public void DrawNode(Graphics g,LockFreeRBNode n,int w,int h,int q){
-//		int ovalSize =30;
-//		g.setFont(new Font("Tahoma", Font.BOLD, 20));
-//		
-//		if(n!=null && n.getValue() >=0 ){
-//			g.drawOval((this.getWidth()/q)+w,h,ovalSize,ovalSize);
-////		      if(temp.isRed) {
-////		          g.setColor(Color.black);
-////		      } else {
-////		    	  	g.setColor(Color.white);
-////		      }
-////		      g.setFont(new Font("TimesRoman", Font.BOLD, 18)); 
-//		      //g.drawString(temp.text,temp.textWidth,temp.textHeight);
-//		      
-//			g.drawString(String.valueOf(n.getValue()), (this.getWidth()/q)+w, h);
-//			if(n.getLeft() !=null && n.getLeft().getValue() >= 0)
-//				DrawNode(g, n.getLeft(), -w, h*2, q);
-//				//DrawNode(g, n.left, -w, h*2, q);
-//				//g.drawString(String.valueOf(n.left.data), (this.getWidth()/q)-w, h+50);
-//			if(n.getRight() !=null && n.getRight().getValue() >= 0)
-//				DrawNode(g, n.getRight(), w*2, h*2, q);
-//			//g.drawString(String.valueOf(n.right.data), (this.getWidth()/q)+w, h+50);
-//		}
-//		
-//		
-//		
-//		
-//	}
-//	
+
 	
     public void DrawTree(Graphics g, int StartWidth, int EndWidth, int StartHeight, int Level, LockFreeRBNode node) {
         String data = "";

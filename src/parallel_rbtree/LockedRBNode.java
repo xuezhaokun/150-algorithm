@@ -17,8 +17,8 @@ public class LockedRBNode{
 	
 	public LockedRBNode(int value){
 		this.value = value;
-		this.left = null;
-		this.right = null;
+		this.left = new LockedRBNode();
+		this.right = new LockedRBNode();
 		this.parent = null;
 		this.isRed = true;
 	}

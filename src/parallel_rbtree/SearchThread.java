@@ -32,10 +32,10 @@ public class SearchThread extends Thread{
 	@Override
 	public void run(){
 		Random rand = new Random();
-		for(int i=0;i<10000;i++){
+		for(int i = 0; i < 10000; i++){
 			if(lock != null) lock.lock();
 			Integer target = rand.nextInt(nodes*num);
-			//System.out.println("Thread "+id+" search "+target);
+			System.out.println("Thread "+id+" search "+target);
 			Integer result = this.rbTree.search(target);
 			if(lock != null) lock.unlock();
 		}

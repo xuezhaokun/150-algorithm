@@ -48,14 +48,14 @@ body{
 	<div class="row">
 		<h2>Parallel Algorithm</h2>
 		<p>
-			<i>"A parallel algorithm, as opposed to a traditional sequential algorithm, is an algorithm which can be executed a piece at a time on many different processing devices, and then combined together again at the end to get the correct result."</i>
+			<i>A <a href="https://en.wikipedia.org/wiki/Parallel_algorithm">parallel algorithm</a>, as opposed to a traditional sequential algorithm, is an algorithm which can be executed a piece at a time on many different processing devices, and then combined together again at the end to get the correct result.</i>
 		</p>
 		<p>
 			People usually build cost-effective parallel algorithms by defining multiple operations on each step to improve the performance of traditional sequential algorithm, which specifies a sequence of operations and each step does one operation.
 		</p>
 		<h3>Lock-Based Algorithm</h3>
 		<p>
-			<i>"A lock or mutex (from mutual exclusion) is a synchronization mechanism for enforcing limits on access to a resource in an environment where there are many threads of execution."</i>
+			<i>A lock or mutex (from mutual exclusion) is a synchronization mechanism for enforcing limits on access to a resource in an environment where there are many threads of execution.</i>
 		</p>
 		<p>
 			Lock-based parallel algorithms are usually implemented on the parallel random-access machine (PRAM), which is a shared-memory model of parallel computation that consists of a collection of identical processors and a shared memory. There are four types of PRAM.
@@ -306,7 +306,7 @@ Right_Rotate(T,y) {
 		<h4>Local Area</h4>
 		<p>
 			<img src="img/local_area.png" alt="local area" width="45%" height="200" align="right">
-			The local area consists of the set of the set of nodes that a process must have full control of
+			The local area consists of the set of nodes that a process must have full control of
 			to ensure successful completion of an operation. As we see, the local area for insertion is just made of nodes involved in the rotation fix-up operation. With the local area concept, if several processes in a localized region have overlapping areas, only the one process that obtains all the flags in its local area will be able to proceed. Other processes will have to re-attempt to gain control of their local areas. As one insertion process completes its processing in one part of the tree, it may either finish entirely (and release all its flags) or move up the tree. In the latter case, the process first obtains the flags of nodes in its new local area, moves up, and then releases the flags that it set for the nodes in its old local area. Releasing flags allows other processes that may have been waiting to advance.
 
 		</p>
@@ -383,7 +383,7 @@ Right_Rotate(T,y) {
 				Natarajan, Aravind, Lee H. Savoie, and Neeraj Mittal. "Concurrent wait-free red black trees." Symposium on Self-Stabilizing Systems. Springer International Publishing, 2013.
 			</li>
 			<li>
-				https://github.com/EslaMx7/AI-Tasks-JADE-Tests/blob/master/src/trees/tasks/treeGUI.java
+				GitHub TreeGui: <a href="https://github.com/EslaMx7/AI-Tasks-JADE-Tests/blob/master/src/trees/tasks/treeGUI.java">https://github.com/EslaMx7/AI-Tasks-JADE-Tests/blob/master/src/trees/tasks/treeGUI.java</a>
 			</li>
 		</ol>
 	</div>
