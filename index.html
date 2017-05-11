@@ -2,6 +2,11 @@
 <html>
 <head>
 <title>Tufts COMP 150-08 Final Project</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -321,15 +326,33 @@ Right_Rotate(T,y) {
 	<div class="row">
 		<h2>Experiment Results</h2>
 		<h3>Sample Output for visualization</h3>
-		I did the visualization for lock-free algorithm. The graph on the left shows the 20-node red-black tree built by my lock-free algorithm. And the figure on the right shows the concurrents flow.<br />
+		I modified the TreeGUI.java code from Github to visualize red-black trees I got from my experiment. Due to the visualization code limits, it can only layout and display well small trees. In my project, I applied the code to display trees with less than 20 nodes. I generated 20 random nodes from 0 to 1000. And I ran lock-based algorithm and lock-free algorithm on the same dataset. As we known, different insertion order could result in different red-black trees. Here are one sample output from my experiment. You can click to enlarge the figures. On the left of the figure, it demonstrates the red-black tree built by the concurrents flow shown on the right.<br />
 		<table class="table borderless">
 			<tbody>
 				<tr>
 					<td>
-						<img src="img/rbtree_demo.png" alt="rbtree demo" width="700" height="500" align="middle">
+						<b>Lock-Based Algorithm Output</b>
 					</td>
 					<td>
-						<img src="img/threads_log.png" alt="threads" width="400" height="300" align="middle">
+						<b>Lock-Free Algorithm Output</b>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<a href="#locked-tree" data-rel="popup" data-position-to="window">
+    					<img src="img/lock_based_tree_drawer.png" alt="lock based tree demo" style="width:50%"></a>
+
+					    <div data-role="popup" id="locked-tree">
+					      	<a href="#pageone" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img src="img/locked_tree.jpg" style="width:100%;height:100%;" alt="lock based tree demo">
+					    </div>
+					</td>
+					<td>
+						<a href="#lock-free-tree" data-rel="popup" data-position-to="window">
+    					<img src="img/lock_based_tree_drawer.png" alt="lock free tree demo" style="width:50%"></a>
+
+					    <div data-role="popup" id="lock-free-tree">
+					      	<a href="#pageone" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img src="img/lockfree_tree.jpg" style="width:100%;height:100%;" alt="lock free tree demo">
+					    </div>
 					</td>
 				</tr>
 			</tbody>
@@ -338,7 +361,7 @@ Right_Rotate(T,y) {
 		<br />
 		Then I did experiments for testing the performance, I ran my program 10 times, and took the average time as the result. 
 		<h3>Insert 1000 nodes to an empty red-black tree</h3>
-		In this experiment I totally insert 1000 nodes to an empty red-black tree by using different number of threads. For example, when the number of threads is 10, it means each thread inserts 100 nodes to the tree.<br /> 
+		In this experiment I totally insert 1000 random nodes to an empty red-black tree by using different number of threads. For example, when the number of threads is 10, it means each thread inserts 100 nodes to the tree.<br /> 
 		<img src="img/insertion_nodes_pic.png" alt="insertion node" width="50%" height="300" align="middle">
 		<h3>Search 10000 times from the tree</h3>
 		I used different number of threads to do 10000 times search on the 1000-node red-black tree I built from the above experiment. <br />

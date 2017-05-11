@@ -277,7 +277,7 @@ public class LockFreeRBTree implements RBTree{
 		
 		if (n == null)
 			return;
-		n.displayNode(n);
+		//n.displayNode(n);
 		preOrder(n.getLeft());
 		preOrder(n.getRight());
 	}
@@ -286,42 +286,9 @@ public class LockFreeRBTree implements RBTree{
 		
 		if (n == null)
 			return;
-		n.displayNode(n);
+		///n.displayNode(n);
 		preOrder(n.getLeft());
 		preOrder(n.getRight());
 	}
-	
-	public synchronized void print() {
-		List<List<String>> res = new LinkedList<List<String>>();
-		res = printHelp(root,0,res);
-		//int id = ((test.testThread<V>)Thread.currentThread()).id;
-		//System.out.println("Thread "+id+"printing:");
-		for (List<String> list:res) {
-			for (String word: list) {
-				System.out.print(word + " ");
-			}
-			System.out.print("\n");
-		}
-	}
-	
-	protected synchronized List<List<String>> printHelp(LockFreeRBNode root,int height,List<List<String>> res) {
-		if (root == null) return res;
-		List<String> list;
-		if (height >= res.size()) {
-			list = new LinkedList<String>();
-			res.add(list);
-		} else {
-			list = res.get(height);
-		}
-		if (root.getValue() < 0) {
-			list.add(" nil ");
-		} else {
-			list.add(root.getValue()+(root.isRed()?"(R)":"(B)"));
-		}
-		printHelp(root.getLeft(),height+1,res);
-		printHelp(root.getRight(),height+1,res);
-		return res;
-	}
-	
 	
 } 

@@ -62,4 +62,7 @@ public class LockedRBNode{
 	public void setRed(boolean isRed) {
 		this.isRed = isRed;
 	}	
+	public void displayNode(LockedRBNode n) {
+		System.out.print(n.getValue() + " ");
+	}
 }

@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -16,36 +17,36 @@ import javax.swing.border.EmptyBorder;
 import parallel_rbtree.LockFreeRBNode;
 import parallel_rbtree.LockFreeRBTree;
 
-public class TreeGUI extends JFrame {
+public class LockFreeRBTreeGUI extends JFrame {
 
 	private JPanel contentPane;
 	public LockFreeRBTree tree;
-	public DrawTree drawer;
+	public DrawLockFreeTree drawer;
 	
 	/**
 	 * Create the frame.
 	 */
-	public TreeGUI(LockFreeRBTree tree) {
+	public LockFreeRBTreeGUI(LockFreeRBTree tree) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 3000, 3000);
+		setBounds(100, 100, 1000, 1000);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
-		drawer = new DrawTree(tree);
+		contentPane.setBorder(BorderFactory.createTitledBorder("Lock-Free Tree"));
+		drawer = new DrawLockFreeTree(tree);
 		
 		contentPane.add(drawer);
 		setContentPane(contentPane);
 		this.tree = tree;
 		setVisible(true);
 	}
-
 }
 
-class DrawTree extends JPanel{
+class DrawLockFreeTree extends JPanel{
 	
 	public LockFreeRBTree tree;
 	
-	public DrawTree(LockFreeRBTree tree){
+	public DrawLockFreeTree(LockFreeRBTree tree){
 		this.tree = tree;
 	}
 	
@@ -59,12 +60,12 @@ class DrawTree extends JPanel{
 
 			//DrawNode(g, tree.root,100, 50,2);
 
-		DrawTree(g, 0, getWidth(), 0, getHeight() / tree.getheight(tree.root), tree.root);
+		DrawLockFreeTree(g, 0, getWidth(), 0, getHeight() / tree.getheight(tree.root), tree.root);
 	}
 	
 
 	
-    public void DrawTree(Graphics g, int StartWidth, int EndWidth, int StartHeight, int Level, LockFreeRBNode node) {
+    public void DrawLockFreeTree(Graphics g, int StartWidth, int EndWidth, int StartHeight, int Level, LockFreeRBNode node) {
         String data = "";
         if (node == null || node.getValue() < 0) {
     			data = "nil";
@@ -94,14 +95,14 @@ class DrawTree extends JPanel{
         		int newStartHeight = StartHeight + Level;
         		
         		g.drawLine((StartWidth + EndWidth) / 2 - dataWidth / 2, StartHeight + Level / 2 + 2, (StartWidth + newEndWidth) / 2 - dataWidth / 2, newStartHeight + Level / 2 - 2);
-        		DrawTree(g, StartWidth, (StartWidth + EndWidth) / 2, StartHeight + Level, Level, node.getLeft());
+        		DrawLockFreeTree(g, StartWidth, (StartWidth + EndWidth) / 2, StartHeight + Level, Level, node.getLeft());
         }
         
         if (node.getRight() != null){
 	        	int newStartWidth = (StartWidth + EndWidth) / 2;
 	    		int newStartHeight = StartHeight + Level;
 	    		g.drawLine((StartWidth + EndWidth) / 2 - dataWidth / 2, StartHeight + Level / 2 + 2, (newStartWidth + EndWidth) / 2 - dataWidth / 2, newStartHeight + Level / 2 - 2);
-        		DrawTree(g, (StartWidth + EndWidth) / 2, EndWidth, StartHeight + Level, Level, node.getRight());
+        		DrawLockFreeTree(g, (StartWidth + EndWidth) / 2, EndWidth, StartHeight + Level, Level, node.getRight());
         }
     }
 	

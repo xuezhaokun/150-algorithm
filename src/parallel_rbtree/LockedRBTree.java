@@ -148,34 +148,31 @@ public class LockedRBTree implements RBTree{
 		y.setParent(x);
 	}
 	
-	public void print() {
-		List<List<String>> res = new LinkedList<List<String>>();
-		res = printHelp(root,0,res);
-		for (List<String> list:res) {
-			for (String word: list) {
-				System.out.print(word+" ");
-			}
-			System.out.print("\n");
-		}
-	}
 	
-	protected List<List<String>> printHelp(LockedRBNode root,int height,List<List<String>> res) {
-		if (root == null) return res;
-		List<String> list;
-		if (height >= res.size()) {
-			list = new LinkedList<String>();
-			res.add(list);
-		} else {
-			list = res.get(height);
-		}
-		if (root.getValue() < 0) {
-			list.add(" nil ");
-		} else {
-			list.add(root.getValue()+(root.isRed()?"(R)":"(B)"));
-		}
-		printHelp(root.getLeft(),height+1,res);
-		printHelp(root.getRight(),height+1,res);
-		return res;
+	
+	public int getheight(LockedRBNode root) {
+		if (root == null)
+			return 0;
+		return Math.max(getheight(root.getLeft()), getheight(root.getRight())) + 1;
+	}
+
+
+	public void preOrder(LockedRBNode n ){
+		
+		if (n == null)
+			return;
+		//n.displayNode(n);
+		preOrder(n.getLeft());
+		preOrder(n.getRight());
+	}
+
+	public void breadth(LockedRBNode n ){
+		
+		if (n == null)
+			return;
+		//n.displayNode(n);
+		preOrder(n.getLeft());
+		preOrder(n.getRight());
 	}
 	
 } 
