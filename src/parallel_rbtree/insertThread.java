@@ -26,16 +26,18 @@ public class insertThread extends Thread{
 	@Override
 	public void run() {
 		for (int value : values) {
-			System.out.println("Thread "+id+" add "+ value);
-			if (lock != null) lock.lock();
+			//System.out.println("Thread "+id+" add "+ value);
+			if (lock != null) {
+				lock.lock();
+			}
 			try {
 				this.rbTree.insert(value);
 			} catch (NullPointerException ne){
 				// 
 			}
-			if (lock != null) lock.unlock();
+			if (lock != null) {
+				lock.unlock();
+			}
 		}
-//		this.rbTree.print();
-//		System.out.println("");
 	}
 }

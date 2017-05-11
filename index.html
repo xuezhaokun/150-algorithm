@@ -281,13 +281,13 @@ Right_Rotate(T,y) {
 						</tr>
 						<tr>
 							<td>
-								For case 1, we just need to recolor the inserted node, its parent, uncle and its grandparent.
+								For case 1, we just need to recolor the inserted node, its parent, uncle and its grandparent. Then we continue to fix upward and reuse the grandparent node as the "inserted" node <i>N</i>.
 							</td>
 							<td>
 								We can to a left rotation on the inserted node's parent to turn it to case 3. And switch label for the parent and inserted node.
 							</td>
 							<td>
-								In case 3, we first do a right rotation on the inserted node's parent, then recolor parent and grandparent.
+								In case 3, we first do a right rotation on the inserted node's parent, then recolor parent and grandparent. Then we move up and fix upward. In this case, we do not reuse the grandparent node.
 							</td>
 						</tr>
 					</tbody>
@@ -312,12 +312,12 @@ Right_Rotate(T,y) {
 		<p>
 			<img src="img/local_area.png" alt="local area" width="45%" height="200" align="right">
 			The local area consists of the set of nodes that a process must have full control of
-			to ensure successful completion of an operation. As we see, the local area for insertion is just made of nodes involved in the rotation fix-up operation. With the local area concept, if several processes in a localized region have overlapping areas, only the one process that obtains all the flags in its local area will be able to proceed. Other processes will have to re-attempt to gain control of their local areas. As one insertion process completes its processing in one part of the tree, it may either finish entirely (and release all its flags) or move up the tree. In the latter case, the process first obtains the flags of nodes in its new local area, moves up, and then releases the flags that it set for the nodes in its old local area. Releasing flags allows other processes that may have been waiting to advance.
-
+			to ensure successful completion of an operation. As we see, the local area for insertion is just made of nodes involved in the rotation fix-up operation. With the local area concept, if several processes in a localized region have overlapping areas, only the one process that obtains all the flags in its local area will be able to proceed. Other processes will have to re-attempt to gain control of their local areas. As one insertion process completes its processing in one part of the tree, it may either finish entirely (and release all its flags) or move up the tree. In the latter case, the process first obtains the flags of nodes in its new local area, moves up, and then releases the flags that it set for the nodes in its old local area. Releasing flags allows other processes that may have been waiting to advance. The figure on the right depicts the "local area" defined by Ma. The animation below demonstrates how local area works for insertion case 1.
+			<img src="img/local_area_demo.gif" alt="local area animation" width="60%" height="450" align="middle">
 		</p>
 		<p>
 			<img src="img/insertion_pseudo.png" alt="insertion" width="45%" height="550" align="right">
-			With the idea of Ma's Algorithm, I add the <i>flag</i> field to my "LockFreeRBNode" object. And the code for <i>CAS</i> and <i>SetupLocalAreaForInsert</i> functions to the regular sequential insertion operation. Here the pseudocode for changes in <i>insertion</i> function.
+			With the idea of Ma's Algorithm, I add a <i>flag</i> field to my "LockFreeRBNode" object, which indicates whether the current node is occupied by any node. And then I added <i>CAS</i> and <i>SetupLocalAreaForInsert</i> functions to the regular sequential insertion operation. The figure on the right shows the pseudocode for changes in <i>insertion</i> function, and the red text shows the changes from sequential algorithm.
 			<img src="img/object.png" alt="insertion" width="55%" height="300" align="left">
 		</p>
 	</div>
@@ -326,7 +326,7 @@ Right_Rotate(T,y) {
 	<div class="row">
 		<h2>Experiment Results</h2>
 		<h3>Sample Output for visualization</h3>
-		I modified the TreeGUI.java code from Github to visualize red-black trees I got from my experiment. Due to the visualization code limits, it can only layout and display well small trees. In my project, I applied the code to display trees with less than 20 nodes. I generated 20 random nodes from 0 to 1000. And I ran lock-based algorithm and lock-free algorithm on the same dataset. As we known, different insertion order could result in different red-black trees. Here are one sample output from my experiment. You can click to enlarge the figures. On the left of the figure, it demonstrates the red-black tree built by the concurrents flow shown on the right.<br />
+		I modified the TreeGUI.java code from Github to visualize red-black trees I got from my experiment. Due to the visualization code limits, it can only layout and display well small trees. In my project, I applied the code to display trees with less than 20 nodes. I generated 20 random nodes from 0 to 1000. And I ran lock-based algorithm and lock-free algorithm on the same dataset. As we known, different insertion order could result in different red-black trees. Here are one sample output from my experiment. Each figure demonstrates the red-black tree built by their own concurrents flow. You can click to enlarge the figures. <br />
 		<table class="table borderless">
 			<tbody>
 				<tr>
@@ -359,16 +359,305 @@ Right_Rotate(T,y) {
 		</table>
 		
 		<br />
-		Then I did experiments for testing the performance, I ran my program 10 times, and took the average time as the result. 
+		Then I did experiments for comparing the performance of these two kinds of synchronizations. For every experiment, I ran my program 10 times, collected results from eclipse console output, and imported the data to excel; finally calculate the average and plotted the line charts in excel. 
 		<h3>Insert 1000 nodes to an empty red-black tree</h3>
-		In this experiment I totally insert 1000 random nodes to an empty red-black tree by using different number of threads. For example, when the number of threads is 10, it means each thread inserts 100 nodes to the tree.<br /> 
-		<img src="img/insertion_nodes_pic.png" alt="insertion node" width="50%" height="300" align="middle">
+		In this experiment I totally insert 1000 random nodes to an empty red-black tree by using different number of threads. For example, when the number of threads is 10, it means each thread inserts 100 nodes to the tree.<br />
+		<h4>Results for Lock-Based Synchronization</h4>
+		<table class="table table-sm">
+			<thead>
+				<tr>
+					<th>
+						Threads #
+					</th>
+					<th colspan="10">
+						Time Cost (ms)
+					</th>
+					<th>
+						Average
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1</td> 
+					<td>21</td><td>18</td><td>21</td><td>21</td><td>22</td><td>22</td><td>21</td><td>23</td>	<td>19</td><td>21</td><td>20.9</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>26</td><td>25</td><td>26</td><td>26</td><td>27</td><td>26</td><td>26</td><td>28</td><td>27</td><td>29</td><td>26.6</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>28</td><td>28</td><td>34</td><td>26</td><td>28</td><td>30</td><td>30</td><td>33</td><td>33</td><td>26</td><td>29.6</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>32</td><td>30</td><td>28</td><td>27</td><td>24</td><td>25</td><td>30</td><td>30</td><td>27</td><td>28</td><td>28.1</td>
+				</tr>
+				<tr>
+					<td>8</td>
+					<td>28</td><td>29</td><td>29</td><td>26</td><td>27</td><td>25</td><td>25</td><td>28</td><td>28</td><td>27</td><td>27.2</td>
+				</tr>
+				<tr>
+					<td>10</td>
+					<td>25</td><td>29</td><td>27</td><td>26</td><td>28</td><td>30</td><td>30</td><td>26</td><td>29</td><td>28</td><td>27.8</td>
+				</tr>
+				<tr>
+					<td>20</td>
+					<td>28</td><td>30</td><td>34</td><td>31</td><td>36</td><td>29</td><td>27</td><td>31</td><td>30</td><td>30</td><td>30.6</td>
+				</td>
+			</tbody>
+		</table>
+		<h4>Results for Lock-Free Synchronization</h4>
+		<table class="table table-sm">
+			<thead>
+				<tr>
+					<th>
+						Threads #
+					</th>
+					<th colspan="10">
+						Time Cost (ms)
+					</th>
+					<th>
+						Average
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td>15</td><td>15</td><td>16</td><td>14</td><td>16</td><td>19</td><td>17</td><td>12</td><td>18</td><td>12</td><td>15.4</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>13</td><td>9</td><td>12</td><td>12</td><td>14</td><td>14</td><td>12</td><td>17</td><td>12</td><td>19</td><td>13.4</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>15</td><td>18</td><td>30</td><td>14</td><td>10</td><td>12</td><td>16</td><td>19</td><td>11</td><td>26</td><td>17.1</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>22</td><td>31</td><td>16</td><td>20</td><td>17</td><td>15</td><td>11</td><td>26</td><td>28</td><td>10</td><td>19.6</td>
+				</tr>
+				<tr>
+					<td>8</td>
+					<td>13</td><td>17</td><td>13</td><td>15</td><td>21</td><td>32</td><td>15</td><td>31</td><td>14</td><td>39</td><td>21</td>
+				</tr>
+				<tr>
+					<td>10</td>
+					<td>20</td><td>30</td><td>13</td><td>13</td><td>55</td><td>27</td><td>10</td><td>21</td><td>27</td><td>17</td><td>23.3</td>
+				</tr>
+				<tr>
+					<td>20</td>
+					<td>15</td><td>14</td><td>48</td><td>16</td><td>29</td><td>13</td><td>12</td><td>19</td><td>15</td><td>20</td><td>20.1</td>
+				</tr>
+			</tbody>
+		</table>
+		<h4>Line Chart for Comparing the Average Time Costs</h4>
+		<img src="img/insertion_nodes_pic.png" alt="insertion node" width="80%" height="400" align="middle">
+		
 		<h3>Search 10000 times from the tree</h3>
 		I used different number of threads to do 10000 times search on the 1000-node red-black tree I built from the above experiment. <br />
-		<img src="img/search_nodes_pic.png" alt="search node" width="50%" height="300" align="middle">
+		<h4>Results for Lock-Based Synchronization</h4>
+		<table class="table table-sm">
+			<thead>
+				<tr>
+					<th>
+						Threads #
+					</th>
+					<th colspan="10">
+						Time Cost (ms)
+					</th>
+					<th>
+						Average
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td>8</td><td>10</td><td>10</td><td>9</td><td>10</td><td>8</td><td>10</td><td>10</td><td>11</td><td>11</td><td>9.7</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>18</td><td>25</td><td>22</td><td>20</td><td>21</td><td>18</td><td>18</td><td>24</td><td>23</td><td>25</td><td>21.4</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>43</td><td>46</td><td>34</td><td>53</td><td>43</td><td>46</td><td>69</td><td>52</td><td>78</td><td>47</td><td>51.1</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>43</td><td>54</td><td>47</td><td>42</td><td>40</td><td>54</td><td>65</td><td>46</td><td>39</td><td>49</td><td>47.9</td>
+				</tr>
+				<tr>
+					<td>8</td>
+					<td>65</td><td>53</td><td>54</td><td>87</td><td>60</td><td>59</td><td>60</td><td>56</td><td>54</td><td>72</td><td>62</td>
+				</tr>
+				<tr>
+					<td>10</td>
+					<td>59</td><td>74</td><td>79</td><td>64</td><td>93</td><td>68</td><td>62</td><td>59</td><td>69</td><td>63</td><td>69</td>
+				</tr>
+				<tr>
+					<td>20</td>
+					<td>93</td><td>83</td><td>128</td><td>94</td><td>94</td><td>87</td><td>86</td><td>102</td><td>99</td><td>112</td><td>97.8</td>
+				</tr>
+			</tbody>
+		</table>
+		<h4>Results for Lock-Free Synchronization</h4>
+		<table class="table table-sm">
+			<thead>
+				<tr>
+					<th>
+						Threads #
+					</th>
+					<th colspan="10">
+						Time Cost (ms)
+					</th>
+					<th>
+						Average
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td>6</td><td>7</td><td>6</td><td>6</td><td>7</td><td>4</td><td>8</td><td>5</td><td>6</td><td>8</td><td>6.3</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>7</td><td>7</td><td>8</td><td>7</td><td>9</td><td>8</td><td>7</td><td>6</td><td>8</td><td>9</td><td>7.6</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>16</td><td>39</td><td>11</td><td>31</td><td>23</td><td>16</td><td>18</td><td>26</td><td>16</td><td>34</td><td>23</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>14</td><td>44</td><td>16</td><td>21</td><td>43</td><td>47</td><td>39</td><td>13</td><td>20</td><td>20</td><td>27.7</td>
+				</tr>
+				<tr>
+					<td>8</td>
+					<td>23</td><td>20</td><td>34</td><td>75</td><td>20</td><td>31</td><td>18</td><td>30</td><td>22</td><td>29</td><td>30.2</td>
+				</tr>
+				<tr>
+					<td>10</td>
+					<td>47</td><td>98</td><td>31</td><td>28</td><td>95</td><td>20</td><td>23</td><td>43</td><td>31</td><td>22</td><td>43.8</td>
+				</tr>
+				<tr>
+					<td>20</td>
+					<td>45</td><td>37</td><td>63</td><td>40</td><td>48</td><td>38</td><td>38</td><td>47</td><td>43</td><td>50</td><td>44.9</td>
+				</tr>
+			</tbody>
+		</table>
+		<h4>Line Chart for Comparing the Average Time Costs</h4>
+		<img src="img/search_nodes_pic.png" alt="search node" width="80%" height="400" align="middle">
+
 		<h3>Use 4 threads to insert different number of nodes</h3>
-		From the insertion experiments, I notices the largest difference happened when I tested with 4 threads. Then I fixed the number of threads and test on inserting different number of nodes.<br />
-		<img src="img/4_threads.png" alt="4 threads" width="50%" height="300" align="middle">
+		Then I fixed the number of threads and changed the number of nodes that each thread needs to insert. Combining  results from the above two experiments, I noticed at using 4 threads we have the largest differences for insertion and search. Therefore, I fixed the number of threads to four for this experiment.<br />
+		<h4>Results for Lock-Based Synchronization</h4>
+		<table class="table table-sm">
+			<thead>
+				<tr>
+					<th>
+						Nodes #
+					</th>
+					<th colspan="10">
+						Time Cost (ms)
+					</th>
+					<th>
+						Average
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>10</td>
+					<td>2</td><td>2</td><td>2</td><td>3</td><td>2</td><td>2</td><td>3</td><td>2</td><td>3</td><td>4</td><td>2.5</td>
+				</tr>
+				<tr>
+					<td>20</td>
+					<td>3</td><td>3</td><td>4</td><td>3</td><td>3</td><td>4</td><td>2</td><td>3</td><td>4</td><td>2</td><td>3.1</td>
+				</tr>
+				<tr>
+					<td>50</td>
+					<td>5</td><td>4</td><td>5</td><td>5</td><td>5</td><td>6</td><td>5</td><td>5</td><td>6</td><td>6</td><td>5.2</td>
+				</tr>
+				<tr>
+					<td>100</td>
+					<td>10</td><td>11</td><td>10</td><td>10</td><td>9</td><td>9</td><td>11</td><td>9</td><td>10</td><td>11</td><td>10</td>
+				</tr>
+				<tr>
+					<td>200</td>
+					<td>23</td><td>20</td><td>22</td><td>21</td><td>22</td><td>21</td><td>20</td><td>24</td><td>27</td><td>20</td><td>22</td>
+				</tr>
+				<tr>
+					<td>500</td>
+					<td>68</td><td>67</td><td>69</td><td>81</td><td>66</td><td>71</td><td>68</td><td>69</td><td>80</td><td>71</td><td>71</td>
+				</tr>
+				<tr>
+					<td>1000</td>
+					<td>168</td><td>167</td><td>177</td><td>161</td><td>164</td><td>162</td><td>198</td><td>185</td><td>174</td><td>178</td><td>173.4</td>
+				</tr>
+			</tbdoy>
+		</table>
+		<h4>Results for Lock-Free Synchronization</h4>
+		<table class="table table-sm">
+			<thead>
+				<tr>
+					<th>
+						Nodes #
+					</th>
+					<th colspan="10">
+						Time Cost (ms)
+					</th>
+					<th>
+						Average
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>10</td>
+					<td>2</td><td>2</td><td>2</td><td>2</td><td>1</td><td>2</td><td>2</td><td>1</td><td>1</td><td>2</td><td>1.7</td>
+				</tr>
+				<tr>
+					<td>20</td>
+					<td>2</td><td>3</td><td>4</td><td>2</td><td>2</td><td>3</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2.4</td>
+				</tr>
+				<tr>
+					<td>50</td>
+					<td>4</td><td>3</td><td>5</td><td>3</td><td>4</td><td>4</td><td>4</td><td>4</td><td>6</td><td>3</td><td>4</td>
+				</tr>
+				<tr>
+					<td>100</td>
+					<td>6</td><td>7</td><td>6</td><td>6</td><td>5</td><td>8</td><td>5</td><td>10</td><td>5</td><td>6</td><td>6.4</td>
+				</tr>
+				<tr>
+					<td>200</td>
+					<td>9</td><td>12</td><td>13</td><td>13</td><td>11</td><td>13</td><td>7</td><td>18</td><td>8</td><td>16</td><td>12</td>
+				</tr>
+				<tr>
+					<td>500</td>
+					<td>17</td><td>19</td><td>21</td><td>23</td><td>17</td><td>17</td><td>25</td><td>23</td><td>18</td><td>37</td><td>21.7</td>
+				</tr>
+				<tr>
+					<td>1000</td>
+					<td>23</td><td>28</td><td>34</td><td>38</td><td>33</td><td>29</td><td>40</td><td>36</td><td>33</td><td>32</td><td>32.6</td>
+				</tr>
+			</tbody>
+		</table>
+		<h4>Line Chart for Comparing the Average Time Costs</h4>
+		<img src="img/4_threads.png" alt="4 threads" width="80%" height="400" align="middle">
+		
+		<div class="row">
+			<h3>How to run my code</h3>
+			<p>
+				<img src="img/code_layout.png" alt="code layout" width="30%" height="300" align="right">
+				You can checkout the code from my Github <a href="https://github.com/xuezhaokun/150-algorithm">repository</a>. And import the project to Eclipse. The figure on the right shows the content of my program. The main function is in "TestTrees.java" file. You can change "<i>num_threads</i>" and "<i>insert_nodes_per_thread</i>" parameters to test the performance for different number of threads and different number of nodes. Or you can just check the video below. It demonstrates how to run some sample experiments with my program. <br />
+				<iframe width="65%" height="450" src="https://www.youtube.com/embed/PoNhaIdfvOE" frameborder="0" allowfullscreen></iframe>
+			</p>
 	</div>
 </div>
 <div class="container">
@@ -376,15 +665,6 @@ Right_Rotate(T,y) {
 		<h2>Conclusion and Future Work</h2>
 		<p>
 			According to my implementation and experiment results, we can reach the conclusion that lock-free algorithms have a better performance on <i>search</i> and <i>insertion</i> operations on relatively large red-black tree. When the tree gets larger, the performance difference would be more obvious. For future work, we can work on implementing lock-free algorithm for <i>deletion</i> operation. Since red-black trees store information not only on leaf nodes but also internal nodes, <i>deletion</i> on red-black trees would result in a more complex structural change, which makes the implementation much harder. Another thing we can do in the future is to find a way to visualize the process for lock-free insertion, which could give users a more straightforward demonstration on how these concurrents work. In addition, in Kim's paper, he proposed an improved version on Ma's algorithm, which needs fewer CAS operations by defining a larger "local area." We might try out his method, and compare the performance with the original Ma's algorithm. We can also study the better concurrent control method "wait-free" to improve the performance for lock-free synchronization.
-		</p>
-	</div>
-</div>
-<div class="container">
-	<div class="row">
-		<h2>How to run my code</h2>
-		<p>
-			<img src="img/code_layout.png" alt="code layout" width="30%" height="300" align="right">
-			You can checkout the code from my Github <a href="https://github.com/xuezhaokun/150-algorithm">repository</a>. The main function is in "TestTrees.java" file. You can change "<i>num_threads</i>" and "<i>insert_nodes_per_thread</i>" parameters to test the performance for different number of threads and different number of nodes.
 		</p>
 	</div>
 </div>
