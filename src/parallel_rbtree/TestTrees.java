@@ -20,7 +20,7 @@ public class TestTrees {
 		long start = 0, end = 0, duration = 0;
 		// ---- customize ----
 		int num_threads = 4;
-		int insert_nodes_per_thread = 1000;
+		int insert_nodes_per_thread = 10;
 		boolean visulize_locked_tree = false;
 		boolean visulize_lock_free_tree = false;
 		// ---------
