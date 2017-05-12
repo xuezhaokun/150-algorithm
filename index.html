@@ -596,7 +596,7 @@ Right_Rotate(T,y) {
 		<img src="img/search_nodes_pic.png" alt="search node" width="80%" height="400" align="middle">
 
 		<h3>Use 4 threads to insert different number of nodes</h3>
-		Then I fixed the number of threads and changed the number of nodes that each thread needs to insert. Combining  results from the above two experiments, I noticed that when using 4 threads we have the largest differences for insertion and search. Therefore, I fixed the number of threads to 4 for this experiment.<br />
+		Then I fixed the number of threads and changed the number of nodes that each thread needs to insert. Combining  results from the above two experiments, I noticed that when using 4 threads we have the largest differences for insertion and search. Therefore, I fixed the number of threads to 4 for this experiment. And I will use the set of data to roughly calculate the constants for Big-O nations of these two algorithms.<br />
 		<h4>Results for Lock-Based Synchronization</h4>
 		<table class="table table-sm">
 			<thead>
@@ -691,7 +691,32 @@ Right_Rotate(T,y) {
 		</table>
 		<h4>Line Chart for Comparing the Average Time Costs</h4>
 		<img src="img/4_threads.png" alt="4 threads" width="80%" height="400" align="middle">
-		
+		<h4>Roughly Estimate the Constants for Big-O Notation</h4>
+		<p>
+			I roughly calculate the constants for Big-O Notations of these two algorithms by O(log<i>n</i> + log<i>k</i>), where k is the number of threads. I used Excel to find the logarithmic trendlines for these these two datasets. As I found, at inserting 4000 nodes, it causes outliers of the trendlines, so I just removed that data point from my dataset, and plotted the following figures. Based on my calculation, the constant for lock-based synchronization is around 30.72, and the constant for lock-free synchronization is about 6.43. The lock-free synchronization has a much smaller constant which means lock-free synchronization performs better than lock-based synchronization.
+		</p>
+		<table>
+			<thead>
+				<tr>
+					<th>
+						Lock-Based Synchronization
+					</th>
+					<th>
+						Lock-Free Synchronization
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<img src="img/lock_based_trend.png" alt="lock-based trend" width="80%" height="400" align="middle">
+					</td>
+					<td>
+						<img src="img/lock_free_trend.png" alt="lock-free trend" width="80%" height="400" align="middle">
+					</td>
+				</tr>
+			</tbody>
+		</table>
 		<div class="row">
 			<h3>How to run my code</h3>
 			<p>
